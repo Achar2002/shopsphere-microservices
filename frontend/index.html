@@ -3,6 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
     <title>ShopSphere</title>
 
     <style>
@@ -15,69 +16,109 @@
         body {
             font-family: Arial, sans-serif;
             background: #f4f6f8;
-            color: #222;
+            color: #1f2937;
         }
 
         header {
-            background: #1f2937;
+            background: #111827;
             color: white;
-            padding: 25px;
-            text-align: center;
+            padding: 20px 50px;
+
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
         }
 
-        header h1 {
-            margin-bottom: 8px;
+        .logo {
+            font-size: 24px;
+            font-weight: bold;
+        }
+
+        nav button {
+            background: transparent;
+            color: white;
+            border: none;
+            margin-left: 20px;
+            font-size: 16px;
+            cursor: pointer;
+        }
+
+        nav button:hover {
+            color: #60a5fa;
+        }
+
+        .hero {
+            text-align: center;
+            padding: 70px 20px;
+            background: white;
+        }
+
+        .hero h1 {
+            font-size: 42px;
+            margin-bottom: 15px;
+        }
+
+        .hero p {
+            color: #6b7280;
+            font-size: 18px;
         }
 
         .container {
-            max-width: 900px;
+            max-width: 1000px;
             margin: 40px auto;
             padding: 20px;
         }
 
         .services {
-            display: flex;
-            gap: 20px;
-            justify-content: center;
-            flex-wrap: wrap;
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+            gap: 25px;
         }
 
         .card {
             background: white;
-            padding: 25px;
-            width: 350px;
-            border-radius: 10px;
-            box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
+            padding: 30px;
+            border-radius: 12px;
+            box-shadow: 0 4px 15px rgba(0, 0, 0, 0.08);
         }
 
         .card h2 {
-            margin-bottom: 10px;
+            margin-bottom: 12px;
         }
 
         .card p {
+            color: #6b7280;
             margin-bottom: 20px;
-            color: #555;
         }
 
-        button {
-            padding: 10px 18px;
-            border: none;
-            border-radius: 6px;
+        .card button {
             background: #2563eb;
             color: white;
+            border: none;
+            padding: 11px 20px;
+            border-radius: 6px;
             cursor: pointer;
         }
 
-        button:hover {
+        .card button:hover {
             background: #1d4ed8;
         }
 
         .response {
-            margin-top: 15px;
-            padding: 12px;
+            margin-top: 20px;
+            padding: 15px;
             background: #f1f5f9;
-            border-radius: 6px;
-            min-height: 45px;
+            border-radius: 8px;
+            min-height: 50px;
+            color: #374151;
+        }
+
+        footer {
+            text-align: center;
+            padding: 30px;
+            margin-top: 40px;
+            background: #111827;
+            color: white;
         }
     </style>
 </head>
@@ -85,81 +126,173 @@
 <body>
 
 <header>
-    <h1>ShopSphere</h1>
-    <p>Microservices Application</p>
+
+    <div class="logo">
+        🛍️ ShopSphere
+    </div>
+
+    <nav>
+        <button onclick="showSection('home')">Home</button>
+        <button onclick="showSection('users')">Users</button>
+        <button onclick="showSection('products')">Products</button>
+    </nav>
+
 </header>
+
+
+<section class="hero" id="home">
+
+    <h1>Welcome to ShopSphere</h1>
+
+    <p>
+        A microservices-based application powered by Spring Boot and Kubernetes.
+    </p>
+
+</section>
+
 
 <div class="container">
 
     <div class="services">
 
-        <div class="card">
-            <h2>User Service</h2>
-            <p>Communicates with the ShopSphere User API.</p>
+        <!-- USER SERVICE -->
+
+        <div class="card" id="users">
+
+            <h2>👤 User Service</h2>
+
+            <p>
+                Manage and access ShopSphere user information.
+            </p>
 
             <button onclick="getUsers()">
-                Get Users
+                View Users
             </button>
 
             <div id="userResponse" class="response">
-                Waiting for request...
+                Click "View Users" to load user service.
             </div>
+
         </div>
 
-        <div class="card">
-            <h2>Product Service</h2>
-            <p>Communicates with the ShopSphere Product API.</p>
+
+        <!-- PRODUCT SERVICE -->
+
+        <div class="card" id="products">
+
+            <h2>🛒 Product Service</h2>
+
+            <p>
+                Browse products available in ShopSphere.
+            </p>
 
             <button onclick="getProducts()">
-                Get Products
+                View Products
             </button>
 
             <div id="productResponse" class="response">
-                Waiting for request...
+                Click "View Products" to load product service.
             </div>
+
         </div>
 
     </div>
 
 </div>
 
+
+<footer>
+
+    <p>ShopSphere Microservices Application</p>
+
+</footer>
+
+
 <script>
+
+    function showSection(section) {
+
+        if (section === "users") {
+
+            document.getElementById("users")
+                .scrollIntoView({ behavior: "smooth" });
+
+        }
+
+        else if (section === "products") {
+
+            document.getElementById("products")
+                .scrollIntoView({ behavior: "smooth" });
+
+        }
+
+        else {
+
+            window.scrollTo({
+                top: 0,
+                behavior: "smooth"
+            });
+
+        }
+
+    }
+
 
     async function getUsers() {
 
+        const responseBox =
+            document.getElementById("userResponse");
+
+        responseBox.innerText = "Loading users...";
+
         try {
 
-            const response = await fetch("http://localhost:8081/users");
+            const response =
+                await fetch("/users");
 
-            const data = await response.text();
+            const data =
+                await response.text();
 
-            document.getElementById("userResponse").innerText = data;
-
-        } catch (error) {
-
-            document.getElementById("userResponse").innerText =
-                "Unable to connect to User Service";
+            responseBox.innerText = data;
 
         }
+
+        catch (error) {
+
+            responseBox.innerText =
+                "Unable to connect to User Service.";
+
+        }
+
     }
 
 
     async function getProducts() {
 
+        const responseBox =
+            document.getElementById("productResponse");
+
+        responseBox.innerText = "Loading products...";
+
         try {
 
-            const response = await fetch("http://localhost:8082/products");
+            const response =
+                await fetch("/products");
 
-            const data = await response.text();
+            const data =
+                await response.text();
 
-            document.getElementById("productResponse").innerText = data;
-
-        } catch (error) {
-
-            document.getElementById("productResponse").innerText =
-                "Unable to connect to Product Service";
+            responseBox.innerText = data;
 
         }
+
+        catch (error) {
+
+            responseBox.innerText =
+                "Unable to connect to Product Service.";
+
+        }
+
     }
 
 </script>
